@@ -1,0 +1,86 @@
+const koa = require('koa');
+const Promise = require('bluebird');
+const uuid = require('node-uuid').v4;
+const toobusy = require('toobusy-js');
+const pathMatch = require('koa-path-match')
+
+module.exports = function serve(aggregation, container, opts) {
+
+    return new Promise((resolve, reject) => {
+        const app = koa();
+        const match = pathMatch();
+        const bodyParser = require('koa-bodyparser');
+
+        // Error handler
+        app.on('error', function(err) {
+            if (process.env.NODE_ENV != 'production') {
+                //console.error(err);
+            }
+        });
+
+        if (opts.parseBody) {
+            app.use(bodyParser({
+                enableTypes: ['json', 'form', 'text'],
+                encode: 'utf-8',
+                jsonLimit: opts.maxBodySize,
+                formLimit: opts.maxBodySize,
+                textLimit: opts.maxBodySize,
+                strict: true
+            }));
+        }
+
+        // logger
+        /*app.use(function *(next){
+            var start = new Date;
+            yield next;
+            var ms = new Date - start;
+            console.log('%s %s - %s', this.method, this.url, ms);
+        });*/
+
+        // Load shedding
+        if (opts.loadShed) {
+            app.use(function *(next) {
+                if (toobusy()) {
+                    this.status = 503;
+                } else {
+                    yield next;
+                } 
+            });
+        }
+
+        // response
+        app.use(match(opts.route, function *() {
+            const ctx = {
+                cid: uuid(),
+                requestContext: {
+                    headers: this.request.header,
+                    params: this.params,
+                    query: this.query,
+                    body: this.request.body
+                },
+                $req: this.request,
+                $res: this.response
+            };
+
+            try {
+                yield container.execute(aggregation.$beforeEach, aggregation, ctx);
+                let result = yield container.execute(aggregation.$run, aggregation, ctx);
+                if (this.body === undefined) {
+                    this.body = result;
+                }
+            } finally {
+                //this.status = 500;
+                yield container.execute(aggregation.$afterEach, aggregation, ctx);
+            } 
+        }));
+
+        Promise.try(() => {
+            return container.execute(aggregation.$before, aggregation);
+        })
+        .then(() => {
+            // accept backlog queue size is constrained
+            app.listen(opts.port, opts.ifc, opts.backlog);
+        })
+        .catch(reject);
+    });
+};
