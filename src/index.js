@@ -16,7 +16,7 @@ module.exports = function serve(aggregation, container, opts) {
         // Error handler
         app.on('error', function(err) {
             if (process.env.NODE_ENV != 'production') {
-                //console.error(err);
+                console.error(err);
             }
         });
 
@@ -53,8 +53,8 @@ module.exports = function serve(aggregation, container, opts) {
         // response
         app.use(match(opts.route, function *() {
             const ctx = {
-                cid: uuid(),
-                requestContext: {
+                $cid: uuid(),
+                $requestContext: {
                     headers: this.request.header,
                     params: this.params,
                     query: this.query,
