@@ -1,3 +1,5 @@
+'use strict';
+
 const koa = require('koa');
 const Promise = require('bluebird');
 const uuid = require('node-uuid').v4;
