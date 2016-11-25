@@ -1,7 +1,7 @@
 {
   "name": "tokio-rest",
   "version": "1.0.0",
-  "description": "Simple HTTP microservice template on top of tokio-core",
+  "description": "HTTP microservice template on top of tokio-core",
   "bin": {
     "tokio-rest": "./bin/tokio-rest.js"
   },
@@ -9,8 +9,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": "jorgemsrs/tokio-rest",
   "author": "Jorge Silva <jorgemsrs@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bluebird": "3.4.6",
     "koa": "1.2.4",
@@ -18,5 +19,8 @@
     "tokio-core": "file:///home/silvaj/Projects/github.com/jorgemsrs/tokio-core",
     "toobusy-js": "0.5.1",
     "yargs": "6.4.0"
+  },
+  "engines": {
+    "node": ">= 4"
   }
 }
