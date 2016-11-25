@@ -5,65 +5,38 @@
  */
 function HelloWorld() {
     // Do what you will here, scope, etc...
-    this.version = '3.2';
 }
 
 /**
+ * Configure the container
  * @async
  * @param {Container} container
  */
 HelloWorld.prototype.$onInit = function(container) {
-    // Configure the container
-    //container.log('$onInit');
-    container.addPlugin('a', {
-        create: {
-            args: [{ $ref: 'b' }],
-            module: function cenas(b) {
-                //console.log('a create>', b)
-                return {
-                    init: function() {
-                        //console.log('a init>');
-                    },
-                    ready: function() {
-                        //console.log('a ready>');
-                    },
-                    destroy: function() {
-                        //console.log('a destroy>');
-                    }
-                };
-            }
-        },
-        properties: {
-            test: 'injected property'
-        },
-        init: 'init',
-        ready: 'ready',
-        destroy: 'destroy'
+    container.addPlugin('satisfies', function () {
+        return function () {
+            return Math.floor(Math.random()*10) % 2;
+        }
     });
 
-    container.addPlugin('b', {
+    container.addPlugin('responseA', {
         create: {
-            module: function pluginB() {
-                //console.log('b create>');
-
-                const service = function onService(cid) {
-                    //console.log('b service>', cid);
-                    return 2222;
+            module: function () {
+                return function ($cid) {
+                    return `Response A - ${$cid}`;
                 }
-
-                service.init = function init() {
-                    //console.log('b init>');
-                };
-
-                service.destroy = function destroy() {
-                    //console.log('b destroy>');
-                }
-
-                return service;
             }
-        },
-        init: 'init',
-        destroy: 'destroy'
+        }
+    });
+
+    container.addPlugin('responseB', {
+        create: {
+            module: function () {
+                return function ($cid, $requestContext) {
+                    return `[${$cid}] Response B - ${$requestContext}`;
+                }
+            }
+        }
     });
 }
 
@@ -76,44 +49,43 @@ HelloWorld.prototype.$onDestroy = function(container) {
 }
 
 /**
+ * Run immediately after container is ready and before servicing starts.
+ * Useful for setup code.
  * @async
  * @di
  */
-HelloWorld.prototype.$before = function(a) {
-    // run immediately after container is ready and before servicing starts
-    // useful for setup code
-    //console.log('before>');
+HelloWorld.prototype.$before = function() {
+    // noop
 }
 
 /**
+ * Run before each service request
  * @async
  * @di
  */
-HelloWorld.prototype.$beforeEach = function(cid) {
-    // run before each service request
-    //console.time(cid);
+HelloWorld.prototype.$beforeEach = function($cid) {
+    console.time($cid);
 }
 
 /**
+ * Run after each service request
  * @async
  * @di
  */
-HelloWorld.prototype.$afterEach = function(cid) {
-    // run after each service request
-    //console.timeEnd(cid);
+HelloWorld.prototype.$afterEach = function($cid) {
+    console.timeEnd($cid);
 }
 
 /**
+ * Servicing fn
  * @async
  * @di
  */
-HelloWorld.prototype.$run = function(cid, b, requestContext, $res) {
-    // service component
-    if (Math.floor(Math.random()*10) % 2) {
-        return `ahahahah! ${cid} - ${b}`;
-    } else {
-        return 'Lucky!';
+HelloWorld.prototype.$run = function(satisfies, responseA, responseB) {
+    if (satisfies()) {
+        return responseA;
     }
+    return responseB;
 }
 
 module.exports = new HelloWorld();
