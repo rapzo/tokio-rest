@@ -1,8 +1,10 @@
 [![Build Status](https://travis-ci.org/jorgemsrs/tokio-rest.svg?branch=master)](https://travis-ci.org/jorgemsrs/tokio-rest) [![Coverage Status](https://coveralls.io/repos/github/jorgemsrs/tokio-rest/badge.svg?branch=master)](https://coveralls.io/github/jorgemsrs/tokio-rest?branch=master)
 
-  Opinionated, light-weight HTTP container for [node.js](https://nodejs.org/) to make Web APIs cheaper to write by 
-  allowing developers to focus on the business logic as opposed to having to worry about non-functional requirements.
+  Opinionated, light-weight HTTP container for [node.js](https://nodejs.org/).
   It brings a design by contract approach to Web API development. 
+  
+  Makes Web APIs arguably cheaper to write by allowing developers to focus on 
+  the business logic as opposed to having to worry about non-functional requirements.
 
 ## Installation
 
