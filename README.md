@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/jorgemsrs/tokio-rest.svg?branch=master)](https://travis-ci.org/jorgemsrs/tokio-rest) [![Coverage Status](https://coveralls.io/repos/github/jorgemsrs/tokio-rest/badge.svg?branch=master)](https://coveralls.io/github/jorgemsrs/tokio-rest?branch=master)
 
-  Opinionated, light-weight HTTP container for node.js to make APIs more enjoyable to write.
+  Opinionated, light-weight HTTP container for [node.js](https://nodejs.org/) to make APIs more enjoyable to write.
 
 ## Installation
 
