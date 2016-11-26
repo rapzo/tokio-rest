@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jorgemsrs/tokio-rest.svg?branch=master)](https://travis-ci.org/jorgemsrs/tokio-rest)
+
   Opinionated, light-weight HTTP container for node.js to make APIs more enjoyable to write.
 
 ## Installation
