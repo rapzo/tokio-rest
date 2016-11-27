@@ -40,8 +40,8 @@ $ nodemon -w path_to_your_module tokio-rest -m path_to_your_module
 
   MIT
 
-[npm-image]: https://img.shields.io/npm/v/tokio-core.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/tokio-core
+[npm-image]: https://img.shields.io/npm/v/tokio-rest.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/tokio-rest
 [travis-image]: https://travis-ci.org/jorgemsrs/tokio-rest.svg?branch=master
 [travis-url]: https://travis-ci.org/jorgemsrs/tokio-rest
 [coveralls-image]: https://coveralls.io/repos/github/jorgemsrs/tokio-rest/badge.svg?branch=master
