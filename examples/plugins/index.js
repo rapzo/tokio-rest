@@ -31,10 +31,9 @@ const myProgram = {
                 module: function () {
                     /**
                      * @param {String} $cid - The request correlation Id
-                     * @param {Object} $requestContext - The request data
                      */
-                    return function ($cid, $requestContext) {
-                        return `[${$cid}] Response B - ${JSON.stringify($requestContext)}`;
+                    return function ($cid) {
+                        return `[${$cid}] Response B - Just a test`;
                     }
                 }
             }
