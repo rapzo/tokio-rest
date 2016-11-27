@@ -18,7 +18,7 @@ $ npm install -g tokio-rest
 
 ## Hello World
 
-In your projects folder, create a NPM module
+Create a NPM module
 
 ```
 $ mkdir hello-tokio
@@ -46,7 +46,7 @@ Save it and, in your project folder, run
 $ tokio-rest -m .
 ```
 
-Point your browser to http://localhost:8080.
+Point your browser to [http://localhost:8080](http://localhost:8080).
 
 
 ## Run
