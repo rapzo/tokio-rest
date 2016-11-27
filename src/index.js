@@ -20,6 +20,17 @@ module.exports = function serve(container, opts) {
             }
         });
 
+        // Load shedding
+        if (opts.loadShed) {
+            app.use(function *(next) {
+                if (toobusy()) {
+                    this.status = 503;
+                } else {
+                    yield next;
+                } 
+            });
+        }
+
         if (opts.parseBody) {
             app.use(bodyParser({
                 enableTypes: ['json', 'form', 'text'],
@@ -38,17 +49,6 @@ module.exports = function serve(container, opts) {
             var ms = new Date - start;
             console.log('%s %s - %s', this.method, this.url, ms);
         });*/
-
-        // Load shedding
-        if (opts.loadShed) {
-            app.use(function *(next) {
-                if (toobusy()) {
-                    this.status = 503;
-                } else {
-                    yield next;
-                } 
-            });
-        }
 
         // response
         app.use(match(opts.route, function *() {
