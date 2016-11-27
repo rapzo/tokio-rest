@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/jorgemsrs/tokio-rest.svg?branch=master)](https://travis-ci.org/jorgemsrs/tokio-rest) [![Coverage Status](https://coveralls.io/repos/github/jorgemsrs/tokio-rest/badge.svg?branch=master)](https://coveralls.io/github/jorgemsrs/tokio-rest?branch=master)
+  [![Build status][travis-image]][travis-url]
+  [![NPM version][npm-image]][npm-url]
+  [![Test coverage][coveralls-image]][coveralls-url]
 
   Opinionated, light-weight HTTP container for [node.js](https://nodejs.org/).
   It brings a design by contract approach to Web API development. 
@@ -37,3 +39,10 @@ $ nodemon -w path_to_your_module tokio-rest -m path_to_your_module
 # License
 
   MIT
+
+[npm-image]: https://img.shields.io/npm/v/tokio-core.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/tokio-core
+[travis-image]: https://travis-ci.org/jorgemsrs/tokio-rest.svg?branch=master
+[travis-url]: https://travis-ci.org/jorgemsrs/tokio-rest
+[coveralls-image]: https://coveralls.io/repos/github/jorgemsrs/tokio-rest/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/jorgemsrs/tokio-rest?branch=master
