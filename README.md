@@ -30,7 +30,7 @@ Create an `index.js` file
 
 ```js
 const myProgram = {
-  $do: function $do() {
+  $do() {
     return 'Hello World!';
   }
 };
