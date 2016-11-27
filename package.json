@@ -15,7 +15,7 @@
   "dependencies": {
     "bluebird": "3.4.6",
     "koa": "1.2.4",
-    "tokio-core": "0.0.1",
+    "tokio-core": "0.0.2",
     "toobusy-js": "0.5.1",
     "uuid": "3.0.0",
     "yargs": "6.4.0"
