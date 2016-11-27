@@ -9,10 +9,10 @@ function HelloWorld() {
 
 /**
  * Configure the container
- * @async
+ * @sync
  * @param {Container} container
  */
-HelloWorld.prototype.$onInit = function(container) {
+HelloWorld.prototype.$configure = function(container) {
     container.addPlugin('satisfies', function () {
         return function () {
             return Math.floor(Math.random()*10) % 2;
@@ -41,21 +41,21 @@ HelloWorld.prototype.$onInit = function(container) {
 }
 
 /**
- * @async
- * @param {Container} container
- */
-HelloWorld.prototype.$onDestroy = function(container) {
-    // Cleanup work
-}
-
-/**
  * Run immediately after container is ready and before servicing starts.
  * Useful for setup code.
  * @async
  * @di
  */
-HelloWorld.prototype.$before = function() {
+HelloWorld.prototype.$setup = function() {
     // noop
+}
+
+/**
+ * @async
+ * @param {Container} container
+ */
+HelloWorld.prototype.$teardown = function(container) {
+    // Cleanup work
 }
 
 /**
@@ -63,8 +63,8 @@ HelloWorld.prototype.$before = function() {
  * @async
  * @di
  */
-HelloWorld.prototype.$beforeEach = function($cid) {
-    console.time($cid);
+HelloWorld.prototype.$require = function($cid) {
+    //console.log('preconditions');
 }
 
 /**
@@ -72,8 +72,8 @@ HelloWorld.prototype.$beforeEach = function($cid) {
  * @async
  * @di
  */
-HelloWorld.prototype.$afterEach = function($cid) {
-    console.timeEnd($cid);
+HelloWorld.prototype.$ensure = function($cid) {
+    //console.log('postconditions');
 }
 
 /**
@@ -81,11 +81,13 @@ HelloWorld.prototype.$afterEach = function($cid) {
  * @async
  * @di
  */
-HelloWorld.prototype.$run = function(satisfies, responseA, responseB) {
+HelloWorld.prototype.$do = function(satisfies, responseA, responseB) {
     if (satisfies()) {
         return responseA;
     }
     return responseB;
 }
 
-module.exports = new HelloWorld();
+module.exports = function helloWorldFactory() {
+    return new HelloWorld();
+};

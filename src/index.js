@@ -2,11 +2,11 @@
 
 const koa = require('koa');
 const Promise = require('bluebird');
-const uuid = require('node-uuid').v4;
+const uuid = require('uuid').v4;
 const toobusy = require('toobusy-js');
 const pathMatch = require('koa-path-match')
 
-module.exports = function serve(aggregation, container, opts) {
+module.exports = function serve(container, opts) {
 
     return new Promise((resolve, reject) => {
         const app = koa();
@@ -62,27 +62,28 @@ module.exports = function serve(aggregation, container, opts) {
                 },
                 $req: this.request,
                 $res: this.response
-            };
+            };            
 
             try {
-                yield container.execute(aggregation.$beforeEach, aggregation, ctx);
-                let result = yield container.execute(aggregation.$run, aggregation, ctx);
+                let result = yield container.execute(ctx);
+
+                // Result may have been set inside the program by using $res.body
                 if (this.body === undefined) {
                     this.body = result;
                 }
-            } finally {
-                //this.status = 500;
-                yield container.execute(aggregation.$afterEach, aggregation, ctx);
+            } catch (err) {
+                console.error(err);
+                this.status = 500;
             } 
         }));
+        
+        // TODO: spin up the health socket
 
-        Promise.try(() => {
-            return container.execute(aggregation.$before, aggregation);
-        })
-        .then(() => {
-            // accept backlog queue size is constrained
-            app.listen(opts.port, opts.ifc, opts.backlog);
-        })
-        .catch(reject);
+        // Spin up the servicing socket
+        app.listen(opts.port, opts.ifc, opts.backlog)
+            .on('error', () => {
+                // TODO: server.close()
+                reject();
+            });
     });
 };

@@ -56,9 +56,9 @@ const argv = require('yargs')
 process.env.NODE_ENV = argv.production ? 'production' : 'development';
 
 const Promise = require('bluebird');
-const container = require('tokio-core').container;
-const aggregation = require(argv.module);
+const Container = require('tokio-core').Container;
 const server = require('../src');
+const container = new Container(require(argv.module));
 const opts = {
     port: argv.port,
     ifc: argv.ifc,
@@ -69,22 +69,16 @@ const opts = {
     loadShed: !argv.noloadshed
 };
 
-function _cleanup() {
-    aggregation.$onDestroy(container);
-    return Promise.all([
-        aggregation.$onDestroy(container),
-        container.destroy().then(process.exit.bind(process, RET_CODE_SUCCESS))
-    ])
-    .catch(function (e) {
-        console.error('[ERROR]', e.stack);
-        process.exit(RET_CODE_ERROR);
-    });
+function _cleanup(signal = RET_CODE_SUCCESS) {
+    return container.destroy()
+        .then(process.exit.bind(process, signal))
+        .catch(function (e) {
+            console.error(e);
+            process.exit(RET_CODE_ERROR);
+        });
 }
 
-Promise
-    // Allow the aggregation to change the container
-    .try(() => aggregation.$onInit(container))
-    .then(() => container.init(5000))
+container.init(5000)
     .then(function installSignalHandlers() {
         // Politely destroy the context
         // LSB killproc() typically waits 3 seconds before actually KILL'ing the process
@@ -94,10 +88,10 @@ Promise
     })
     .then(() => {
         // start servicing
-        return server(aggregation, container, opts);
+        return server(container, opts);
     })
-    .then(function cleanup() { return container.destroy() })
+    .then(_cleanup)
     .catch((err) => {
-        console.error('Got an error', err.stack);
-        return _cleanup();
+        console.error(err.stack);
+        return _cleanup(RET_CODE_ERROR);
     });
