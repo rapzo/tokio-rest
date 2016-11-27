@@ -16,6 +16,39 @@ $ npm install -g tokio-rest
 
   tokio-rest is supported in node v4+.
 
+## Hello World
+
+In your projects folder, create a NPM module
+
+```
+$ mkdir hello-tokio
+$ cd hello-tokio
+$ npm init -y
+```
+
+Create an `index.js` file 
+
+```js
+const myProgram = {
+  $do: function $do() {
+    return 'Hello World!';
+  }
+};
+
+module.exports = function myProgramFactory() {
+  return myProgram;
+}
+```
+
+Save it and, in your project folder, run
+
+```
+$ tokio-rest -m .
+```
+
+Point your browser to http://localhost:8080.
+
+
 ## Run
 
 ```
