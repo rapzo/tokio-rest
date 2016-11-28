@@ -11,14 +11,15 @@ module.exports = function serve(container, opts) {
 
     return new Promise((resolve, reject) => {
         const app = koa();
-        
+        const logger = container.logger();
+
         // Error handler
-        // TODO: improve
         app.on('error', function(err) {
             if (process.env.NODE_ENV != 'production') {
-                container.logger(err);
+                logger.error(err);
             }
         });
+        logger.debug('Installed error handler');
 
         // Load shedding
         if (opts.loadShed) {
@@ -29,6 +30,7 @@ module.exports = function serve(container, opts) {
                     yield next;
                 } 
             });
+            logger.debug('Installed load shed');
         }
 
         if (opts.parseBody) {
@@ -40,6 +42,7 @@ module.exports = function serve(container, opts) {
                 textLimit: opts.maxBodySize,
                 strict: true
             }));
+            logger.debug('Installed body parser');
         }
 
         // TODO: Request logger
@@ -86,11 +89,15 @@ module.exports = function serve(container, opts) {
                 this.status = 500;
             } 
         }));
+        logger.debug(`Installed API route in "${opts.route}"`);
         
         // TODO: spin up the health socket
 
         // Spin up the servicing socket
         app.listen(opts.port, opts.ifc, opts.backlog)
+            .on('listening', () => {
+                logger.info(`Up & running at http://${opts.ifc}:${opts.port}/`);
+            })
             .on('error', () => {
                 // TODO: server.close()
                 reject();
