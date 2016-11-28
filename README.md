@@ -6,7 +6,7 @@
   It brings a design by contract approach to Web API development. 
   
   Makes Web APIs arguably cheaper to write by allowing developers to focus on 
-  the business logic as opposed to having to worry about non-functional requirements.
+  the business logic instead of non-functional requirements.
 
 ## Installation
 

@@ -40,8 +40,14 @@ const argv = require('yargs')
     // Is this a production deploy?
     .boolean('production')
     .describe('production', 'Disable development checks')
+    // Logging
+    .choices('logLevel', ['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL', 'OFF'])
+    .default('logLevel', 'INFO')
+    .describe('logLevel', 'Log verbosity')
+    .string('logFile')
+    .describe('logFile', 'File to write logs to')
     // Others
-    .epilog('copyright Jorge Silva, 2016')
+    .epilog('copyright Jorge Silva, 2016') // TODO: add credit to the rest of the crew
     .version(function version() {
         return require('../package.json').version;
     })
@@ -55,10 +61,34 @@ const argv = require('yargs')
  */
 process.env.NODE_ENV = argv.production ? 'production' : 'development';
 
-const Promise = require('bluebird');
-const Container = require('tokio-core').Container;
-const server = require('../src');
-const container = new Container(require(argv.module));
+// tokio-core Container configuration
+const containerConfig = {
+    log: {
+        levels: {
+            '[all]': argv.logLevel
+        },
+        appenders: [
+            {
+                type: 'console',
+                category: '[default]',
+                "layout": {
+                    "type": "pattern",
+                    "pattern": "%[%r %p %c -%] %m"
+                }
+            },
+            {
+                type: 'console',
+                category: 'request',
+                "layout": {
+                    "type": "pattern",
+                    "pattern": "%[%r %p %c ->%] %m"
+                }   
+            }
+        ],
+        replaceConsole: true
+    }
+};
+// HTTP server configuration
 const opts = {
     port: argv.port,
     ifc: argv.ifc,
@@ -68,6 +98,11 @@ const opts = {
     maxBodySize: argv.maxbodysize,
     loadShed: !argv.noloadshed
 };
+
+const Promise = require('bluebird');
+const Container = require('tokio-core').Container;
+const server = require('../src');
+const container = new Container(require(argv.module), containerConfig);
 
 function _cleanup(signal = RET_CODE_SUCCESS) {
     return container.destroy()
