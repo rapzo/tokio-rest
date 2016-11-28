@@ -44,10 +44,12 @@ const myProgram = {
      * Distribute different responses.
      * @return {String}
      */
-    $do(satisfies, responseA, responseB) {
+    $do(satisfies, responseA, responseB, $log) {
         if (satisfies()) {
+            $log.info('response A')
             return responseA;
         }
+        $log.info('response B')
         return responseB;
     }
 };
