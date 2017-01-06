@@ -3,9 +3,9 @@
   [![Test coverage][coveralls-image]][coveralls-url]
 
   Opinionated, light-weight HTTP container for [node.js](https://nodejs.org/).
-  It brings a design by contract approach to Web API development. 
-  
-  Makes Web APIs arguably cheaper to write by allowing developers to focus on 
+  It brings a design by contract approach to Web API development.
+
+  Makes Web APIs arguably cheaper to write by allowing developers to focus on
   the business logic instead of non-functional requirements.
 
 ## Installation
@@ -26,7 +26,7 @@ $ cd hello-tokio
 $ npm init -y
 ```
 
-Create an `index.js` file 
+Create an `index.js` file
 
 ```js
 const myProgram = {
@@ -68,6 +68,15 @@ Run with supervisor, e.g. `nodemon`
 ```
 $ nodemon -w path_to_your_module tokio-rest -m path_to_your_module
 ```
+
+# Acknowledgements
+
+This project is the result of the collaborative work of
+- fernandesh
+- mirandal
+- bacelarh
+- soaresp
+- henriquesj
 
 # License
 
