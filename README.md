@@ -14,7 +14,7 @@
 $ npm install -g tokio-rest
 ```
 
-  tokio-rest is supported in node v4+.
+  tokio-rest is supported in node v6+.
 
 ## Hello World
 
@@ -68,6 +68,10 @@ Run with supervisor, e.g. `nodemon`
 ```
 $ nodemon -w path_to_your_module tokio-rest -m path_to_your_module
 ```
+
+# Learn more
+
+TODO
 
 # Acknowledgements
 
